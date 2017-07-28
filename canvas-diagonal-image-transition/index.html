@@ -1,0 +1,119 @@
+<html>
+<body>
+  <style>
+  canvas {
+    border:1px solid black;
+  }
+  </style>
+
+  <canvas id="canvas" width="700" height="306"></canvas>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script>
+
+  $( document ).ready(function() {
+
+    var canvas=document.getElementById("canvas");
+    var ctx=canvas.getContext("2d");
+
+    var imagesOK=0;
+    var imgs=[];
+    var imageURLs=[];
+    imageURLs.push("http://localhost:8888/_poc/diagonal-image/images/test.png");
+    loadAllImages();
+
+    function loadAllImages(){
+      for (var i = 0; i < imageURLs.length; i++) {
+        var img = new Image();
+        imgs.push(img);
+        img.onload = function(){ imagesOK++; imagesAllLoaded(); };
+        img.src = imageURLs[i];
+      }
+    }
+
+    var currentOffset = 0;
+
+var imagesAllLoaded = function() {
+  if (imagesOK==imageURLs.length ) {
+     start();
+     setInterval(start, 1);
+  }
+};
+
+function addMaskedStrip(startX, strips) {
+  let stripeW = 80; // FIXME 80 is also offset in start function
+  let stripeH = 306;
+  let stripeDeg = 45;
+  let stripOffsetX = 400;
+
+  if(strips.length > 0) {
+    startX = (strips[strips.length - 1] + (stripeW * 2))
+  }
+
+  strips.push(startX)
+
+  ctx.moveTo(startX, 0);
+  ctx.lineTo(startX + stripeW, 0);
+  ctx.lineTo(startX + stripeW - stripOffsetX, stripeH);
+  ctx.lineTo(startX - stripOffsetX, stripeH);
+
+  return strips;
+}
+
+function start() {
+    let imgW = 700;
+    let stripW = 80;
+    let offsetSpeed = 4;
+
+    // STOP ANIMATION
+    if(currentOffset > imgW) {
+      return;
+    }
+
+    var strips=[];
+    var startX = 0;
+
+    ctx.save();
+    ctx.beginPath();
+    addMaskedStrip(startX, strips);
+    addMaskedStrip(startX, strips);
+    addMaskedStrip(startX, strips);
+    addMaskedStrip(startX, strips);
+    addMaskedStrip(startX, strips);
+    addMaskedStrip(startX, strips);
+    addMaskedStrip(startX, strips);
+    addMaskedStrip(startX, strips);
+    addMaskedStrip(startX, strips);
+    addMaskedStrip(startX, strips);
+    addMaskedStrip(startX, strips);
+    addMaskedStrip(startX, strips);
+    ctx.clip();
+    ctx.drawImage(imgs[0],-(imgW*2) + currentOffset,0);
+    ctx.restore();
+
+    strips=[];
+    startX = stripW;
+    ctx.save();
+    ctx.beginPath();
+    addMaskedStrip(startX, strips);
+    addMaskedStrip(startX, strips);
+    addMaskedStrip(startX, strips);
+    addMaskedStrip(startX, strips);
+    addMaskedStrip(startX, strips);
+    addMaskedStrip(startX, strips);
+    addMaskedStrip(startX, strips);
+    addMaskedStrip(startX, strips);
+    addMaskedStrip(startX, strips);
+    addMaskedStrip(startX, strips);
+    addMaskedStrip(startX, strips);
+    ctx.clip();
+    ctx.drawImage(imgs[0],0 - currentOffset,0);
+    ctx.restore();
+
+    currentOffset+=offsetSpeed;
+}
+
+
+  })
+  </script>
+</body>
+</html>
