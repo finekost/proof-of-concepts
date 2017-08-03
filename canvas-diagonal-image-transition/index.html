@@ -10,34 +10,60 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script>
 
-  $( document ).ready(function() {
+  // CREATE A STABLE LOOP WITH MAX 30 Frames per Second
+  var updateId,
+      previousDelta = 0,
+      fpsLimit = 30;
 
-    var canvas=document.getElementById("canvas");
-    var ctx=canvas.getContext("2d");
+  function update(currentDelta) {
+      updateId = requestAnimationFrame(update);
 
-    var imagesOK=0;
-    var imgs=[];
-    var imageURLs=[];
-    imageURLs.push("http://localhost:8888/_poc/diagonal-image/images/test.png");
-    loadAllImages();
+      var delta = currentDelta - previousDelta;
 
-    function loadAllImages(){
-      for (var i = 0; i < imageURLs.length; i++) {
-        var img = new Image();
-        imgs.push(img);
-        img.onload = function(){ imagesOK++; imagesAllLoaded(); };
-        img.src = imageURLs[i];
+      if (fpsLimit && delta < 1000 / fpsLimit) {
+          return;
       }
-    }
 
-    var currentOffset = 0;
+      /* your code here */
+      canvasRender();
 
-var imagesAllLoaded = function() {
-  if (imagesOK==imageURLs.length ) {
-     start();
-     setInterval(start, 1);
+      previousDelta = currentDelta;
   }
-};
+
+  update();
+
+  // --- CANVAS CODE
+
+
+  var currentOffset = 0;
+  var canvas=document.getElementById("canvas");
+  var ctx=canvas.getContext("2d");
+
+  var imagesOK=0;
+  var imgs=[];
+  var imageURLs=[];
+  imageURLs.push("http://localhost:8888/_poc/diagonal-image/images/test.png");
+
+
+  loadAllImages();
+
+  function loadAllImages(){
+    for (var i = 0; i < imageURLs.length; i++) {
+      var img = new Image();
+      imgs.push(img);
+      img.onload = function(){ imagesOK++; imagesAllLoaded(); };
+      img.src = imageURLs[i];
+    }
+  }
+
+
+  var imagesAllLoaded = function() {
+    if (imagesOK==imageURLs.length ) {
+   //start();
+   //setInterval(start, 1);
+    }
+  }
+
 
 function addMaskedStrip(startX, strips) {
   let stripeW = 80; // FIXME 80 is also offset in start function
@@ -59,15 +85,35 @@ function addMaskedStrip(startX, strips) {
   return strips;
 }
 
-function start() {
-    let imgW = 700;
-    let stripW = 80;
-    let offsetSpeed = 4;
-
-    // STOP ANIMATION
-    if(currentOffset > imgW) {
+function canvasRender() {
+    // AVOID ERROR
+    if(!ctx) {
       return;
     }
+
+    let targetOffset = 350;
+    let imgW = 700;
+    let stripW = 80;
+    let offsetSpeed = 34;
+
+    // IF THE CURRENT POS IS TARGET POS
+    // ANI IS DONE
+    if(currentOffset == targetOffset) {
+      console.log("DONE");
+      return;
+    }
+
+    currentOffset+=offsetSpeed;
+
+    // IF THE NEW VALUE WOULD OVERSHOOT THE ANI
+    // SET OFFSET TO DESIRED END OFFSET
+    if(currentOffset > targetOffset) {
+      console.log("LAST HIT");
+      currentOffset = targetOffset;
+    }
+
+
+    console.log("ani runns");
 
     var strips=[];
     var startX = 0;
@@ -109,11 +155,10 @@ function start() {
     ctx.drawImage(imgs[0],0 - currentOffset,0);
     ctx.restore();
 
-    currentOffset+=offsetSpeed;
+    //currentOffset+=offsetSpeed;
 }
 
 
-  })
   </script>
 </body>
 </html>
