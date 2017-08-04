@@ -1,0 +1,198 @@
+<html>
+  <head>
+    <title>finekost.com - blend-zoom</title>
+    <link rel="stylesheet" href="css/fkst-blend-zoom.css">
+    <script src="js/jquery-3.2.1.min.js"></script>
+
+    <!-- increases animation performance -->
+    <script src="js/velocity.min.js"></script>
+    <script src="js/fkst-blend-zoom.js"></script>
+
+    <script type="text/javascript">
+    $( document ).ready(function() {
+
+        animateStage('.fkst-blend-zoom-wrap');
+
+        window.setTimeout(fixContainer, 6000);
+
+        $(window).scroll(function() {
+
+          // FORCE ANI END ON EARLY SCROLL
+          // PRETTY BUGGY ANIMATION WILL STILL RUN
+          /*
+          $(".fkst-blend-zoom-wrap video").hide();
+          $( ".image-font-masked" ).velocity("finish", true);
+          $( ".image-font-white" ).velocity("finish", true);
+          $( ".fkst-blend-zoom" ).velocity("finish", true);
+          fixContainer();
+          */
+        });
+    });
+
+
+    function animateStage(container) {
+      $( container +" video" ).get(0).play();
+
+      $(container +" video").on('ended',function(){
+        $(container +" video").hide();
+      });
+
+      $( ".fkst-blend-zoom" ).blendZoom();
+
+      let videoLength = 6000;
+      let textMaskedShowStart = videoLength + 0;
+      let textMaskedShowDuration = 800;
+
+      let blackToImageStart = videoLength + 800;
+      let blackToImageDuration = 800;
+
+      let textWhiteShowStart = videoLength + 3500;
+      let textWhiteShowDuration = 2000;
+
+
+      // CUSTOM CODE FOR IMAGE LAYER
+      $( ".fkst-blend-zoom" ).velocity({
+        opacity: [1.0, 0]
+      }, {
+        queue: false,
+        delay:blackToImageStart,
+        duration:blackToImageDuration
+      });
+
+
+      // CUSTOM CODE FOR FONT LAYER
+      $( ".image-font-masked" ).velocity({
+        opacity: [1.0]
+      }, {
+        queue: false,
+        delay:textMaskedShowStart,
+        duration:textMaskedShowDuration
+      });
+
+      // CODE FOR WHITE FONT LAYER
+      $( ".image-font-white" ).velocity({
+        opacity: [1.0]
+      }, {
+        queue: false,
+        delay:textWhiteShowStart,
+        duration:blackToImageDuration
+      });
+    }
+
+
+    function fixContainer() {
+      $('.image-bg').css({position:'fixed'});
+      $('.fkst-blend-zoom-wrap .content-black').css({position:'fixed'});
+    }
+
+    </script>
+
+
+    <style type="text/css">
+    html,body {
+      margin:0;
+      padding:0;
+    }
+
+    .fkst-blend-zoom-wrap .content-black {
+      position: absolute;
+      top:0px;
+      left:0px;
+      width:100%;
+      height:100%;
+      background-color: black;
+    }
+
+    .fkst-blend-zoom-wrap video {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      -webkit-transform: translateX(-50%) translateY(-50%);
+      transform: translateX(-50%) translateY(-50%);
+      min-width: 100%;
+      min-height: 100%;
+      width: auto;
+      height: auto;
+      overflow: hidden;
+    }
+
+    .image-bg {
+      opacity: 0;
+      background:url('images/bg.jpg');
+    }
+
+    .image-font {
+      position: absolute;
+      top:0px;
+      left:0px;
+      width:100%;
+      height:100%;
+      opacity: 0;
+    }
+
+    .image-font-masked {
+      background:url('images/font-masked.png');
+      background-position: center;
+      background-size: cover;
+    }
+
+    .image-font-white {
+      background:url('images/font-white.png');
+      background-position: center;
+      background-size: cover;
+    }
+
+    .main-content {
+      position: relative;
+      top:0px;
+      left:0px;
+      color:white;
+    }
+
+    .main-content-inner {
+      width:100%;
+      background-color: white;
+    }
+
+    </style>
+
+  </head>
+<body>
+
+<div class="fkst-blend-zoom-wrap">
+  <div class="content-black"></div>
+  <video  src="videos/confed-vid.mp4" video autobuffer></video>
+  <div style="transform: scale(1.4);"
+        class="image-bg fkst-blend-zoom"
+        data-scale-start="1.4"
+        data-scale-target="1.0"
+        data-scale-delay="7750"
+        data-scale-duration="1000"
+
+        data-opacity-start="1.0"
+        data-opacity-target="0.5"
+        data-opacity-delay="10000"
+        data-opacity-duration="1000"
+        >
+  </div>
+
+  <div class="image-font image-font-masked"></div>
+  <div class="image-font image-font-white"></div>
+
+</div>
+
+<div class="main-content">
+  <h2>NEW CONTENT</h2>
+  <img src="images/bg.jpg" width="50%">
+  <div class="main-content-inner">
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+  </div>
+</div>
+
+</body>
+</html>
