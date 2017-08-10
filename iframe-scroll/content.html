@@ -1,0 +1,47 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="js/jquery-3.2.1.min.js"></script>
+
+    <script type="text/javascript">
+    $( document ).ready(function() {
+      console.log("window width in iframe: " + $(window).width());
+        $('h2').html("width: " + $(window).width());
+
+        //$(window.frameElement.parentNode).animate({ scrollTop: $(".page-2").offset().top }, 1000);
+        console.log(window.frameElement.parentNode.parentNode);
+
+        //var node = findParentBody();
+
+        $(window.frameElement.parentNode.parentNode).animate({ scrollTop: $(".page-2").offset().top }, 1000);
+    });
+
+    function findBody() {
+
+    }
+    </script>
+
+    <style>
+    .page {
+      border:2px solid red;
+      padding:2px;
+      height:500px;
+      width: 500px;
+    }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <h1>I bims 1 Headline</h1>
+      <h2></h2>
+    </div>
+    <div class="page page-2">
+      <h1>I bims 2 Headline</h1>
+      <h2></h2>
+    </div>
+
+  </body>
+</html>
