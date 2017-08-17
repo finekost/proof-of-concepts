@@ -1,0 +1,223 @@
+<html>
+<head>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <style>
+  html,body {
+    margin:0;
+    padding: 0;
+        overflow: hidden;
+  }
+
+  video {
+    position: absolute;
+    opacity: 0;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translateX(-50%) translateY(-50%);
+    transform: translateX(-50%) translateY(-50%);
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    z-index: -1000;
+    overflow: hidden;
+    z-index:2;
+  }
+
+  .bg {
+    position: absolute;
+    top: -50px;
+    left: -50px;
+
+    width:1920;
+    height:1000;
+    background: url('images/test.jpg');
+    background-size: 100% auto;
+
+
+    z-index:1;
+  }
+
+  .case {
+    /*
+    border-bottom:1px solid white;
+    border-top:0px solid white;
+    */
+
+    position: absolute;
+    top:400px;
+    width:250px;
+    height:250px;
+    background: url('images/test.jpg');
+
+    background-size: 768% auto;
+
+    color:white;
+    font-family: Helvetica;
+    word-wrap: break-word;
+    font-weight: bolder;
+    line-height: 56px;
+    font-size: 68px;
+
+
+    z-index:3;
+    cursor: pointer;
+  }
+
+  .case-1 {
+    left:400px;
+    background-position: left -400px top -400px;
+  }
+
+  .case-2 {
+    left:700px;
+    background-position: left -700px top -400px;
+  }
+
+  .case div {
+    margin:10px;
+    pointer-events: none;
+  }
+
+  .case:hover > .line {
+    animation-fill-mode: forwards;
+    animation-name: lineToTop;
+    animation-duration: 0.25s;
+    animation-timing-function: ease-in-out;
+  }
+
+  .line {
+    position: absolute;
+    top:100%;
+    left:0px;
+    margin:0 !important;
+    padding:0;
+    width:100%;
+    height:1px;
+    background-color: white;
+  }
+
+
+  @keyframes  lineToTop {
+    100% {top:0%;}
+  }
+  @keyframes  lineToBottom {
+    100% {top:100%;}
+  }
+  </style>
+
+  <script>
+
+  $( document ).ready(function() {
+    //return;
+
+/*
+    $('.case-1').css({
+      'top': 400,
+      'left': -400
+    });
+
+    $('.case-1').stop().delay(1000).animate({
+      'top': 400,
+      'left': 400
+    },650);
+    */
+
+
+    $( ".case-1" ).stop().mouseover(function( event ) {
+      $('.case').not('.case-1').animate({
+        'opacity' : 0
+      }, 300);
+
+      $('video').attr("src", "http://www.finekost.com/wp-content/uploads/2017/02/HUA_nova_loop_header_10sec_02.mp4");
+
+      $('video').stop().delay(300).animate({
+        'opacity' : 1
+      }, 500);
+    });
+
+    $( ".case-1" ).stop().mouseout(function( event ) {
+      $('.case').not('.case-1').animate({
+        'opacity' : 1
+      }, 300);
+
+      $('video').animate({
+        'opacity' : 0
+      }, 500);
+    });
+
+    $( ".case-2" ).stop().mouseover(function( event ) {
+      $('.case').not('.case-2').animate({
+        'opacity' : 0
+      }, 300);
+
+      $('video').attr("src", "http://www.finekost.com/wp-content/uploads/2016/04/Flaschenkino.mp4");
+
+      $('video').stop().delay(300).animate({
+        'opacity' : 1
+      }, 500);
+    });
+
+    $( ".case-2" ).stop().mouseout(function( event ) {
+      $('.case').not('.case-2').animate({
+        'opacity' : 1
+      }, 300);
+
+      $('video').animate({
+        'opacity' : 0
+      }, 500);
+    });
+
+
+
+
+    $( ".bg" ).mousemove(function( event ) {
+      //msg += event.pageX + ", " + event.pageY;
+      var w = $(".bg").width();
+      var h = $(".bg").height();
+      var x = event.pageX;
+      var y = event.pageY;
+      var deltaX = (w/2) - x;
+      var deltaY = (h/2) - y;
+
+      var offsetX = deltaX * -0.01;
+      var offsetY = deltaY * -0.01;
+      var startX1 = 400;
+      var startX2 = 700;
+      var startY = 400;
+
+      var paralaxFact = 7;
+      $('.case-1').css({
+        'top': startY + (offsetY * paralaxFact),
+        'left': startX1 + (offsetX * paralaxFact)
+      });
+
+      $('.case-2').css({
+        'top': startY + (offsetY * paralaxFact),
+        'left': startX2 + (offsetX * paralaxFact)
+      });
+      /*
+      $('.case-2').animate({
+        'top': 1000
+      }, 1000);
+      */
+      $('.bg').css({
+        'background-position-y': offsetY,
+        'background-position-x': offsetX
+      },1000);
+    });
+  });
+
+
+  </script>
+
+</head>
+<body>
+  <div class="bg">
+    <video src="" muted autoplay loop></video>
+    <div class="case case-1"><div>HUAWEI Nova</div><div class="line"></div></div>
+    <div class="case case-2"><div>Flaschenkino</div><div class="line"></div></div>
+  </div>
+</body>
+</html>

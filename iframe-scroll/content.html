@@ -19,9 +19,16 @@
         $(window.frameElement.parentNode.parentNode).animate({ scrollTop: $(".page-2").offset().top }, 1000);
     });
 
-    function findBody() {
-
+    if (typeof window.addEventListener != 'undefined') {
+      window.addEventListener('message', onmessage, false);
+    } else if (typeof window.attachEvent != 'undefined') {
+      window.attachEvent('onmessage', onmessage);
     }
+
+    var onmessage = function(e) {
+      console.log("message recieved")
+      console.log(e);
+    };
     </script>
 
     <style>

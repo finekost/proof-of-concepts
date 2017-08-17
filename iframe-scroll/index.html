@@ -11,6 +11,12 @@
 
         console.log("window width in root: " + $(window).width());
         $('h2').html("width: " + $(window).width());
+
+        //var ifrm = $('iframe');
+        var ifrm = window.frames['fr'];
+        //ifrm.methodInFrame('test');
+
+        postMessage('test', "http://localhost:8888/proof-of-concepts/iframe-scroll/content.html");
     });
     </script>
 
@@ -20,7 +26,8 @@
     <h2></h2>
 
     <div>
-    <iframe width="90%" height="1200" src="content.html"></iframe>
+    <!--<iframe width="90%" height="1200" src="http://spielwiese7.finekost.com/iframe-scroll/content.html"></iframe>-->
+    <iframe id="fr" width="90%" height="1200" src="http://localhost:8888/proof-of-concepts/iframe-scroll/content.html"></iframe>
     </div>
   </body>
 </html>
